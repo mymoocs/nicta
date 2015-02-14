@@ -204,7 +204,7 @@ flatMap ::
   (a -> List b)
   -> List a
   -> List b
-flatMap f xs = flatten (map f xs)
+flatMap f = flatten . map f
 
 
 -- | Flatten a list of lists to a list (again).
@@ -242,8 +242,15 @@ flattenAgain = flatMap (\x->x)
 seqOptional ::
   List (Optional a)
   -> Optional (List a)
-seqOptional =
-  error "todo"
+
+-- seqOptional Nil = Full Nil
+seqOptional = list Nil
+  where
+    list acc Nil     = Full acc
+    list acc (x:.xs) = case x of
+                        Full a -> list (acc ++ (a:.Nil)) xs
+                        Empty  -> Empty
+
 
 -- | Find the first element in the list matching the predicate.
 --
@@ -265,8 +272,10 @@ find ::
   (a -> Bool)
   -> List a
   -> Optional a
-find =
-  error "todo"
+find _ Nil = Empty  
+find p (x:.xs) | p x      = Full x
+               |otherwise = find p xs 
+
 
 -- | Determine if the length of the given list is greater than 4.
 --
@@ -284,8 +293,14 @@ find =
 lengthGT4 ::
   List a
   -> Bool
-lengthGT4 =
-  error "todo"
+lengthGT4 Nil  = False
+lengthGT4 ys = len 0 ys
+  where
+    len n Nil = n > 4
+    len n (_:.xs) |n > 4 = True
+                  |otherwise = len (n+1) xs
+    
+
 
 -- | Reverse a list.
 --
@@ -301,11 +316,14 @@ lengthGT4 =
 reverse ::
   List a
   -> List a
-reverse =
-  error "todo"
+reverse = rev Nil
+  where
+    rev acc Nil     = acc
+    rev acc (x:.xs) = rev (x:.acc) xs
 
--- | Produce an infinite `List` that seeds with the given value at its head,
--- then runs the given function for subsequent elements
+
+-- | Produce an infinite `List` that seeds with the given value at
+-- its head, then runs the given function for subsequent elements
 --
 -- >>> let (x:.y:.z:.w:._) = produce (+1) 0 in [x,y,z,w]
 -- [0,1,2,3]
@@ -316,8 +334,8 @@ produce ::
   (a -> a)
   -> a
   -> List a
-produce =
-  error "todo"
+produce f x = x:.produce f (f x)
+
 
 -- | Do anything other than reverse a list.
 -- Is it even possible?
@@ -331,8 +349,10 @@ produce =
 notReverse ::
   List a
   -> List a
-notReverse =
-  error "todo"
+
+notReverse = reverse
+
+
 
 ---- End of list exercises
 
