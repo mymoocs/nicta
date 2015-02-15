@@ -16,7 +16,7 @@ import qualified Prelude as P
 -- is not checked by the compiler. This law is given as:
 --
 -- * The law of associative composition
---   `∀a b c. ((.) <$> a <*> b <*> c) ≅ (a <*> (b <*> c))`
+--   `â�€a b c. ((.) <$> a <*> b <*> c) â‰… (a <*> (b <*> c))`
 class Functor f => Apply f where
   -- Pronounced apply.
   (<*>) ::
@@ -35,8 +35,7 @@ instance Apply Id where
     Id (a -> b)
     -> Id a
     -> Id b
-  (<*>) =
-    error "todo"
+  (<*>) (Id f) ida = f <$> ida 
 
 -- | Implement @Apply@ instance for @List@.
 --
@@ -47,8 +46,9 @@ instance Apply List where
     List (a -> b)
     -> List a
     -> List b
-  (<*>) =
-    error "todo"
+  (<*>) Nil _  = Nil
+  (<*>) (f:.fs) xs  = (f <$> xs) ++ (fs <*> xs)
+  
 
 -- | Implement @Apply@ instance for @Optional@.
 --
@@ -65,8 +65,9 @@ instance Apply Optional where
     Optional (a -> b)
     -> Optional a
     -> Optional b
-  (<*>) =
-    error "todo"
+  (<*>) Empty     _ = Empty
+  (<*>) (Full f) oa = f <$> oa
+
 
 -- | Implement @Apply@ instance for reader.
 --
@@ -89,8 +90,7 @@ instance Apply ((->) t) where
     ((->) t (a -> b))
     -> ((->) t a)
     -> ((->) t b)
-  (<*>) =
-    error "todo"
+  (<*>) f pf = (\x -> f x (pf x)) 
 
 -- | Apply a binary function in the environment.
 --
@@ -117,8 +117,8 @@ lift2 ::
   -> f a
   -> f b
   -> f c
-lift2 =
-  error "todo"
+lift2 f fa fb = f <$> fa <*> fb
+
 
 -- | Apply a ternary function in the environment.
 --
@@ -149,8 +149,7 @@ lift3 ::
   -> f b
   -> f c
   -> f d
-lift3 =
-  error "todo"
+lift3 f fa fb fc = f <$> fa <*> fb <*> fc 
 
 -- | Apply a quaternary function in the environment.
 --
@@ -182,8 +181,8 @@ lift4 ::
   -> f c
   -> f d
   -> f e
-lift4 =
-  error "todo"
+lift4 f fa fb fc fd = f <$> fa <*> fb <*> fc <*> fd
+
 
 -- | Sequence, discarding the value of the first argument.
 -- Pronounced, right apply.
@@ -208,8 +207,7 @@ lift4 =
   f a
   -> f b
   -> f b
-(*>) =
-  error "todo"
+(*>)  = lift2 (const id) -- TODO: examine case of list
 
 -- | Sequence, discarding the value of the second argument.
 -- Pronounced, left apply.
@@ -234,8 +232,7 @@ lift4 =
   f b
   -> f a
   -> f b
-(<*) =
-  error "todo"
+(<*) = lift2 const -- TODO: examine case of list
 
 -----------------------
 -- SUPPORT LIBRARIES --

@@ -23,10 +23,10 @@ import qualified Prelude as P
 -- laws are not checked by the compiler. These laws are given as:
 --
 -- * The law of left identity
---   `∀x. pure <*> x ≅ x`
+--   `â�€x. pure <*> x â‰… x`
 --
 -- * The law of right identity
---   `∀x. x <*> pure ≅ x`
+--   `â�€x. x <*> pure â‰… x`
 class Apply f => Applicative f where
   pure ::
     a -> f a
@@ -46,8 +46,7 @@ class Apply f => Applicative f where
   (a -> b)
   -> f a
   -> f b
-(<$>) =
-  error "todo"
+(<$>) f fa = pure f <*> fa 
 
 -- | Insert into Id.
 --
@@ -56,8 +55,7 @@ instance Applicative Id where
   pure ::
     a
     -> Id a
-  pure =
-    error "todo"
+  pure = Id
 
 -- | Insert into a List.
 --
@@ -66,8 +64,7 @@ instance Applicative List where
   pure ::
     a
     -> List a
-  pure =
-    error "todo"
+  pure = (:.Nil)
 
 -- | Insert into an Optional.
 --
@@ -76,8 +73,7 @@ instance Applicative Optional where
   pure ::
     a
     -> Optional a
-  pure =
-    error "todo"
+  pure = Full
 
 -- | Insert into a constant function.
 --
@@ -86,8 +82,7 @@ instance Applicative ((->) t) where
   pure ::
     a
     -> ((->) t a)
-  pure =
-    error "todo"
+  pure = const
 
 -- | Sequences a list of structures to a structure of list.
 --
@@ -109,8 +104,8 @@ sequence ::
   Applicative f =>
   List (f a)
   -> f (List a)
-sequence =
-  error "todo"
+sequence Nil     = pure Nil 
+sequence (x:.xs) = pure (:.) <*>  x <*> (sequence xs) 
 
 -- | Replicate an effect a given number of times.
 --
@@ -133,8 +128,9 @@ replicateA ::
   Int
   -> f a
   -> f (List a)
-replicateA =
-  error "todo"
+replicateA 0 _ = pure Nil
+replicateA n fa  = pure (:.) <*> fa <*> (replicateA (n-1) fa)  
+
 
 -- | Filter a list with a predicate that produces an effect.
 --
@@ -161,8 +157,8 @@ filtering ::
   (a -> f Bool)
   -> List a
   -> f (List a)
-filtering =
-  error "todo"
+filtering p =
+  foldRight (\a -> lift2 (\b -> if b then (a:.) else id) (p a))(pure Nil)
 
 -----------------------
 -- SUPPORT LIBRARIES --
