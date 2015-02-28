@@ -22,7 +22,7 @@ import qualified Prelude as P
 -- is not checked by the compiler. This law is given as:
 --
 -- * The law of associativity
---   `∀f g x. g =<< (f =<< x) ≅ ((g =<<) . f) =<< x`
+--   `â�€f g x. g =<< (f =<< x) â‰… ((g =<<) . f) =<< x`
 class Apply f => Bind f where
   -- Pronounced, bind.
   (=<<) ::
@@ -68,9 +68,11 @@ infixr 1 =<<
   f (a -> b)
   -> f a
   -> f b
-(<*>) =
-  error "todo"
+(<*>) f fa = error "todo" -- (\a -> f) <<= fa
+  
+--(a -> f b) -> f a -> f b
 
+  
 infixl 4 <*>
 
 -- | Binds a function on the Id monad.
@@ -82,8 +84,7 @@ instance Bind Id where
     (a -> Id b)
     -> Id a
     -> Id b
-  (=<<) =
-    error "todo"
+  (=<<) f (Id a) = f a
 
 -- | Binds a function on a List.
 --
@@ -94,8 +95,10 @@ instance Bind List where
     (a -> List b)
     -> List a
     -> List b
-  (=<<) =
-    error "todo"
+  (=<<) _ Nil = Nil
+  (=<<) f (x:.xs) = f x ++ (f =<< xs)
+  
+
 
 -- | Binds a function on an Optional.
 --
@@ -106,8 +109,9 @@ instance Bind Optional where
     (a -> Optional b)
     -> Optional a
     -> Optional b
-  (=<<) =
-    error "todo"
+  (=<<) _ Empty    = Empty
+  (=<<) f (Full x) = f x 
+  
 
 -- | Binds a function on the reader ((->) t).
 --
@@ -118,8 +122,8 @@ instance Bind ((->) t) where
     (a -> ((->) t b))
     -> ((->) t a)
     -> ((->) t b)
-  (=<<) =
-    error "todo"
+  (=<<) f g = (\x -> f x (g x))
+
 
 -- | Flattens a combined structure to a single structure.
 --
@@ -138,8 +142,7 @@ join ::
   Bind f =>
   f (f a)
   -> f a
-join =
-  error "todo"
+join = 
 
 -- | Implement a flipped version of @(=<<)@, however, use only
 -- @join@ and @(<$>)@.

@@ -19,7 +19,7 @@ this source code:
 Alternatively, you may run the tests in a single source file by using `doctest`
 explicitly. From the base directory of this source code:
 
-    > doctest -isrc -Wall -fno-warn-type-defaults <filename.hs>
+    x> doctest -isrc -Wall -fno-warn-type-defaults <filename.hs>
 
 *  Progression
 
