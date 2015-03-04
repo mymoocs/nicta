@@ -68,7 +68,7 @@ infixr 1 =<<
   f (a -> b)
   -> f a
   -> f b
-(<*>) f fa = error "todo" -- (\a -> f) <<= fa
+(<*>) f fa = (<$> fa) =<< f -- (\a -> f) <<= fa
   
 --(a -> f b) -> f a -> f b
 
@@ -122,7 +122,7 @@ instance Bind ((->) t) where
     (a -> ((->) t b))
     -> ((->) t a)
     -> ((->) t b)
-  (=<<) f g = (\x -> f x (g x))
+  (=<<) f g = \x -> f (g x) x
 
 
 -- | Flattens a combined structure to a single structure.
@@ -142,7 +142,7 @@ join ::
   Bind f =>
   f (f a)
   -> f a
-join = 
+join = (id =<<)
 
 -- | Implement a flipped version of @(=<<)@, however, use only
 -- @join@ and @(<$>)@.
@@ -155,8 +155,7 @@ join =
   f a
   -> (a -> f b)
   -> f b
-(>>=) =
-  error "todo"
+(>>=) fa f = join (f <$> fa)
 
 infixl 1 >>=
 
@@ -171,8 +170,8 @@ infixl 1 >>=
   -> (a -> f b)
   -> a
   -> f c
-(<=<) =
-  error "todo"
+(<=<) f g a = (g a) >>= f
+
 
 infixr 1 <=<
 
