@@ -10,8 +10,9 @@ import Course.Parser
 import Course.MoreParser
 import Course.JsonValue
 import Course.Functor
+import Course.Apply
 import Course.Applicative
-import Course.Monad
+import Course.Bind
 import Course.List
 import Course.Optional
 
@@ -110,7 +111,7 @@ toSpecialCharacter c =
 jsonString ::
   Parser Chars
 jsonString =
-  error "todo: Course.JsonParser#jsonString"
+  error "todo"
 
 -- | Parse a JSON rational.
 --
@@ -139,7 +140,7 @@ jsonString =
 jsonNumber ::
   Parser Rational
 jsonNumber =
-  error "todo: Course.JsonParser#jsonNumber"
+  error "todo"
 
 -- | Parse a JSON true literal.
 --
@@ -153,7 +154,7 @@ jsonNumber =
 jsonTrue ::
   Parser Chars
 jsonTrue =
-  error "todo: Course.JsonParser#jsonTrue"
+  error "todo"
 
 -- | Parse a JSON false literal.
 --
@@ -167,7 +168,7 @@ jsonTrue =
 jsonFalse ::
   Parser Chars
 jsonFalse =
-  error "todo: Course.JsonParser#jsonFalse"
+  error "todo"
 
 -- | Parse a JSON null literal.
 --
@@ -181,7 +182,7 @@ jsonFalse =
 jsonNull ::
   Parser Chars
 jsonNull =
-  error "todo: Course.JsonParser#jsonNull"
+  error "todo"
 
 -- | Parse a JSON array.
 --
@@ -204,7 +205,7 @@ jsonNull =
 jsonArray ::
   Parser (List JsonValue)
 jsonArray =
-  error "todo: Course.JsonParser#jsonArray"
+  error "todo"
 
 -- | Parse a JSON object.
 --
@@ -224,7 +225,7 @@ jsonArray =
 jsonObject ::
   Parser Assoc
 jsonObject =
-  error "todo: Course.JsonParser#jsonObject"
+  error "todo"
 
 -- | Parse a JSON value.
 --
@@ -241,7 +242,7 @@ jsonObject =
 jsonValue ::
   Parser JsonValue
 jsonValue =
-   error "todo: Course.JsonParser#jsonValue"
+   error "todo"
 
 -- | Read a file into a JSON value.
 --
@@ -250,4 +251,4 @@ readJsonValue ::
   Filename
   -> IO (ParseResult JsonValue)
 readJsonValue =
-  error "todo: Course.JsonParser#readJsonValue"
+  error "todo"

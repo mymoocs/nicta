@@ -7,7 +7,8 @@ module Course.FileIO where
 
 import Course.Core
 import Course.Applicative
-import Course.Monad
+import Course.Apply
+import Course.Bind
 import Course.Functor
 import Course.List
 
@@ -46,7 +47,7 @@ And b.txt, containing:
 And c.txt, containing:
   the contents of c
 
-$ runhaskell FileIO.hs "files.txt"
+$ runhaskell io.hs "files.txt"
 ============ a.txt
 the contents of a
 
@@ -62,7 +63,7 @@ the contents of c
 main ::
   IO ()
 main =
-  error "todo: Course.FileIO#main"
+  error "todo"
 
 type FilePath =
   Chars
@@ -72,30 +73,30 @@ run ::
   Chars
   -> IO ()
 run =
-  error "todo: Course.FileIO#run"
+  error "todo"
 
 getFiles ::
   List FilePath
   -> IO (List (FilePath, Chars))
 getFiles =
-  error "todo: Course.FileIO#getFiles"
+  error "todo"
 
 getFile ::
   FilePath
   -> IO (FilePath, Chars)
 getFile =
-  error "todo: Course.FileIO#getFile"
+  error "todo"
 
 printFiles ::
   List (FilePath, Chars)
   -> IO ()
 printFiles =
-  error "todo: Course.FileIO#printFiles"
+  error "todo"
 
 printFile ::
   FilePath
   -> Chars
   -> IO ()
 printFile =
-  error "todo: Course.FileIO#printFile"
+  error "todo"
 

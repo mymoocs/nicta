@@ -33,7 +33,7 @@ anagrams ::
   -> Filename
   -> IO (List Chars)
 anagrams =
-  error "todo: Course.Anagrams#anagrams"
+  error "todo"
 
 -- Compare two strings for equality, ignoring case
 equalIgnoringCase ::
@@ -41,4 +41,4 @@ equalIgnoringCase ::
   -> Chars
   -> Bool
 equalIgnoringCase =
-  error "todo: Course.Anagrams#equalIgnoringCase"
+  error "todo"

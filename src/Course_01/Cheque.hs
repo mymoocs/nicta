@@ -23,8 +23,8 @@ import Course.Core
 import Course.Optional
 import Course.List
 import Course.Functor
-import Course.Applicative
-import Course.Monad
+import Course.Apply
+import Course.Bind
 
 -- $setup
 -- >>> :set -XOverloadedStrings
@@ -324,4 +324,4 @@ dollars ::
   Chars
   -> Chars
 dollars =
-  error "todo: Course.Cheque#dollars"
+  error "todo"

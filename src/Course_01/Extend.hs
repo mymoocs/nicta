@@ -14,7 +14,7 @@ import Course.Functor
 -- is not checked by the compiler. This law is given as:
 --
 -- * The law of associativity
---   `∀f g. (f <<=) . (g <<=) ≅ (<<=) (f . (g <<=))`
+--   `∀f g x. (f <<=) . (g <<=) ≅ (<<=) (f . (g <<=) <<=)
 class Functor f => Extend f where
   -- Pronounced, extend.
   (<<=) ::
@@ -34,7 +34,7 @@ instance Extend Id where
     -> Id a
     -> Id b
   (<<=) =
-    error "todo: Course.Extend (<<=)#instance Id"
+    error "todo"
 
 -- | Implement the @Extend@ instance for @List@.
 --
@@ -52,7 +52,7 @@ instance Extend List where
     -> List a
     -> List b
   (<<=) =
-    error "todo: Course.Extend (<<=)#instance List"
+    error "todo"
 
 -- | Implement the @Extend@ instance for @Optional@.
 --
@@ -67,7 +67,7 @@ instance Extend Optional where
     -> Optional a
     -> Optional b
   (<<=) =
-    error "todo: Course.Extend (<<=)#instance Optional"
+    error "todo"
 
 -- | Duplicate the functor using extension.
 --
@@ -87,4 +87,4 @@ cojoin ::
   f a
   -> f (f a)
 cojoin =
-  error "todo: Course.Extend#cojoin"
+  error "todo"

@@ -7,6 +7,7 @@ module Course.Interactive where
 import Course.Core
 import Course.Functor
 import Course.Applicative
+import Course.Bind
 import Course.Monad
 import Course.Traversable
 import Course.List
@@ -83,7 +84,7 @@ data Op =
 convertInteractive ::
   IO ()
 convertInteractive =
-  error "todo: Course.Interactive#convertInteractive"
+  error "todo"
 
 -- |
 --
@@ -111,7 +112,7 @@ convertInteractive =
 reverseInteractive ::
   IO ()
 reverseInteractive =
-  error "todo: Course.Interactive#reverseInteractive"
+  error "todo"
 
 -- |
 --
@@ -137,7 +138,7 @@ reverseInteractive =
 encodeInteractive ::
   IO ()
 encodeInteractive =
-  error "todo: Course.Interactive#encodeInteractive"
+  error "todo"
 
 interactive ::
   IO ()

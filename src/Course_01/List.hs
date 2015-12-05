@@ -4,8 +4,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 -- + Complete the 10 exercises below by filling out the function bodies.
---   Replace the function bodies (error "todo: ...") with an appropriate
---   solution.
+--   Replace the function bodies (error "todo") with an appropriate solution.
 -- + These exercises may be done in any order, however:
 --   Exercises are generally increasing in difficulty, though some people may find later exercise easier.
 -- + Bonus for using the provided functions or for using one exercise solution to help solve another.
@@ -13,8 +12,6 @@
 
 module Course.List where
 
-import qualified Control.Applicative as A
-import qualified Control.Monad as M
 import Course.Core
 import Course.Optional
 import qualified System.Environment as E
@@ -26,7 +23,7 @@ import qualified Numeric as N
 -- >>> import Test.QuickCheck
 -- >>> import Course.Core(even, id, const)
 -- >>> import qualified Prelude as P(fmap, foldr)
--- >>> instance Arbitrary a => Arbitrary (List a) where arbitrary = P.fmap ((P.foldr (:.) Nil) :: ([a] -> List a)) arbitrary
+-- >>> instance Arbitrary a => Arbitrary (List a) where arbitrary = P.fmap (P.foldr (:.) Nil) arbitrary
 
 -- BEGIN Helper functions and data types
 
@@ -75,8 +72,9 @@ headOr ::
   a
   -> List a
   -> a
-headOr =
-  error "todo: Course.List#headOr"
+headOr a Nil     = a
+headOr _ (x:._) = x
+
 
 -- | The product of the elements of a list.
 --
@@ -88,8 +86,9 @@ headOr =
 product ::
   List Int
   -> Int
-product =
-  error "todo: Course.List#product"
+product xs = case xs of
+              Nil     -> 1
+              (x:.xs') -> x * product xs'
 
 -- | Sum the elements of the list.
 --
@@ -103,8 +102,9 @@ product =
 sum ::
   List Int
   -> Int
-sum =
-  error "todo: Course.List#sum"
+sum Nil    = 0
+sum (x:.xs) = x + sum xs
+
 
 -- | Return the length of the list.
 --
@@ -115,8 +115,8 @@ sum =
 length ::
   List a
   -> Int
-length =
-  error "todo: Course.List#length"
+length Nil    = 0
+length (_:.xs) = 1 + length xs
 
 -- | Map the given function on each element of the list.
 --
@@ -130,8 +130,8 @@ map ::
   (a -> b)
   -> List a
   -> List b
-map =
-  error "todo: Course.List#map"
+map _ Nil   = Nil
+map f (x:.xs) = f x :. map f xs 
 
 -- | Return elements satisfying the given predicate.
 --
@@ -147,8 +147,10 @@ filter ::
   (a -> Bool)
   -> List a
   -> List a
-filter =
-  error "todo: Course.List#filter"
+filter _ Nil = Nil
+filter p (x:.xs) |p x = x:.filter p xs
+                 |otherwise = filter p xs
+
 
 -- | Append two lists to a new list.
 --
@@ -166,8 +168,8 @@ filter =
   List a
   -> List a
   -> List a
-(++) =
-  error "todo: Course.List#(++)"
+(++) Nil ys = ys
+(++) (x:.xs) ys = x:. (xs ++ ys)
 
 infixr 5 ++
 
@@ -184,8 +186,9 @@ infixr 5 ++
 flatten ::
   List (List a)
   -> List a
-flatten =
-  error "todo: Course.List#flatten"
+flatten Nil = Nil  
+flatten (xs:.xss) = xs ++ flatten xss
+
 
 -- | Map a function then flatten to a list.
 --
@@ -201,8 +204,8 @@ flatMap ::
   (a -> List b)
   -> List a
   -> List b
-flatMap =
-  error "todo: Course.List#flatMap"
+flatMap f = flatten . map f
+
 
 -- | Flatten a list of lists to a list (again).
 -- HOWEVER, this time use the /flatMap/ function that you just wrote.
@@ -211,8 +214,8 @@ flatMap =
 flattenAgain ::
   List (List a)
   -> List a
-flattenAgain =
-  error "todo: Course.List#flattenAgain"
+flattenAgain = flatMap (\x->x) 
+
 
 -- | Convert a list of optional values to an optional list of values.
 --
@@ -239,8 +242,15 @@ flattenAgain =
 seqOptional ::
   List (Optional a)
   -> Optional (List a)
-seqOptional =
-  error "todo: Course.List#seqOptional"
+
+-- seqOptional Nil = Full Nil
+seqOptional = list Nil
+  where
+    list acc Nil     = Full acc
+    list acc (x:.xs) = case x of
+                        Full a -> list (acc ++ (a:.Nil)) xs
+                        Empty  -> Empty
+
 
 -- | Find the first element in the list matching the predicate.
 --
@@ -262,8 +272,10 @@ find ::
   (a -> Bool)
   -> List a
   -> Optional a
-find =
-  error "todo: Course.List#find"
+find _ Nil = Empty  
+find p (x:.xs) | p x      = Full x
+               |otherwise = find p xs 
+
 
 -- | Determine if the length of the given list is greater than 4.
 --
@@ -281,8 +293,14 @@ find =
 lengthGT4 ::
   List a
   -> Bool
-lengthGT4 =
-  error "todo: Course.List#lengthGT4"
+lengthGT4 Nil  = False
+lengthGT4 ys = len 0 ys
+  where
+    len n Nil = n > 4
+    len n (_:.xs) |n > 4 = True
+                  |otherwise = len (n+1) xs
+    
+
 
 -- | Reverse a list.
 --
@@ -298,11 +316,14 @@ lengthGT4 =
 reverse ::
   List a
   -> List a
-reverse =
-  error "todo: Course.List#reverse"
+reverse = rev Nil
+  where
+    rev acc Nil     = acc
+    rev acc (x:.xs) = rev (x:.acc) xs
 
--- | Produce an infinite `List` that seeds with the given value at its head,
--- then runs the given function for subsequent elements
+
+-- | Produce an infinite `List` that seeds with the given value at
+-- its head, then runs the given function for subsequent elements
 --
 -- >>> let (x:.y:.z:.w:._) = produce (+1) 0 in [x,y,z,w]
 -- [0,1,2,3]
@@ -313,8 +334,8 @@ produce ::
   (a -> a)
   -> a
   -> List a
-produce =
-  error "todo: Course.List#produce"
+produce f x = x:.produce f (f x)
+
 
 -- | Do anything other than reverse a list.
 -- Is it even possible?
@@ -328,8 +349,10 @@ produce =
 notReverse ::
   List a
   -> List a
-notReverse =
-  error "todo: Is it even possible?"
+
+notReverse = reverse
+
+
 
 ---- End of list exercises
 
@@ -685,16 +708,6 @@ show' ::
   -> List Char
 show' =
   listh . show
-
-instance P.Functor List where
-  fmap =
-    M.liftM
-
-instance A.Applicative List where
-  (<*>) =
-    M.ap
-  pure =
-    (:. Nil)
 
 instance P.Monad List where
   (>>=) =

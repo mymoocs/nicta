@@ -8,16 +8,16 @@ import Course.Core
 import Course.Id
 import Course.Optional
 import Course.List
-import qualified Prelude as P(fmap)
+import qualified Prelude as P
 
 -- | All instances of the `Functor` type-class must satisfy two laws. These laws
 -- are not checked by the compiler. These laws are given as:
 --
 -- * The law of identity
---   `∀x. (id <$> x) ≅ x`
+--   `â�€x. (id <$> x) â‰… x`
 --
 -- * The law of composition
---   `∀f g x.(f . g <$> x) ≅ (f <$> (g <$> x))`
+--   `â�€f g x.(f . g <$> x) â‰… (f <$> (g <$> x))`
 class Functor f where
   -- Pronounced, eff-map.
   (<$>) ::
@@ -41,8 +41,7 @@ instance Functor Id where
     (a -> b)
     -> Id a
     -> Id b
-  (<$>) =
-    error "todo: Course.Functor (<$>)#instance Id"
+  (<$>)  = mapId
 
 -- | Maps a function on the List functor.
 --
@@ -56,8 +55,7 @@ instance Functor List where
     (a -> b)
     -> List a
     -> List b
-  (<$>) =
-    error "todo: Course.Functor (<$>)#instance List"
+  (<$>) = map 
 
 -- | Maps a function on the Optional functor.
 --
@@ -71,8 +69,9 @@ instance Functor Optional where
     (a -> b)
     -> Optional a
     -> Optional b
-  (<$>) =
-    error "todo: Course.Functor (<$>)#instance Optional"
+  (<$>) _ Empty    = Empty
+  (<$>) f (Full a) = Full (f a)
+
 
 -- | Maps a function on the reader ((->) t) functor.
 --
@@ -83,15 +82,15 @@ instance Functor ((->) t) where
     (a -> b)
     -> ((->) t a)
     -> ((->) t b)
-  (<$>) =
-    error "todo: Course.Functor (<$>)#((->) t)"
+  (<$>) f g x = f (g x)
+
 
 -- | Anonymous map. Maps a constant value on a functor.
 --
--- >>> 7 <$ (1 :. 2 :. 3 :. Nil)
+-- >>> 7 <$ [1,2,3]
 -- [7,7,7]
 --
--- prop> x <$ (a :. b :. c :. Nil) == (x :. x :. x :. Nil)
+-- prop> x <$ [a,b,c] == [x,x,x]
 --
 -- prop> x <$ Full q == Full x
 (<$) ::
@@ -99,12 +98,11 @@ instance Functor ((->) t) where
   a
   -> f b
   -> f a
-(<$) =
-  error "todo: Course.Functor#(<$)"
+(<$) a f = P.const a <$> f  -- (\x -> a) <$> f 
 
 -- | Anonymous map producing unit value.
 --
--- >>> void (1 :. 2 :. 3 :. Nil)
+-- >>> void [1,2,3]
 -- [(),(),()]
 --
 -- >>> void (Full 7)
@@ -119,8 +117,8 @@ void ::
   Functor f =>
   f a
   -> f ()
-void =
-  error "todo: Course.Functor#void"
+void f = P.const () <$> f
+
 
 -----------------------
 -- SUPPORT LIBRARIES --
@@ -131,5 +129,13 @@ void =
 -- >>> reverse <$> (putStr "hi" P.>> P.return ("abc" :: List Char))
 -- hi"cba"
 instance Functor IO where
+  (<$>) =
+    P.fmap
+
+instance Functor [] where
+  (<$>) =
+    P.fmap
+
+instance Functor P.Maybe where
   (<$>) =
     P.fmap

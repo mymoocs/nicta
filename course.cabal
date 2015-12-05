@@ -1,5 +1,5 @@
 name:                 course
-version:              0.1.2
+version:              0.1.4
 license:              BSD3
 license-file:         etc/LICENCE
 author:               Tony Morris <tmorris@tmorris.net>
@@ -9,7 +9,7 @@ author:               James Earl Douglas <james@earldouglas.com>
 author:               Eric Torreborre <etorreborre@yahoo.com>
 maintainer:           Tony Morris
 copyright:            Copyright (C) 2010-2013 Tony Morris
-copyright:            Copyright (C) 2012-2014 National ICT Australia Limited 2012-2014
+copyright:            Copyright (C) 2012-2015 National ICT Australia Limited 
 copyright:            Copyright (C) 2012      James Earl Douglas
 copyright:            Copyright (C) 2012      Ben Sinclair
 synopsis:             Source code for a functional programming course
@@ -44,6 +44,7 @@ library
                       -fno-warn-unused-do-bind
                       -fno-warn-unused-imports
                       -fno-warn-type-defaults
+                      -ferror-spans
 
   default-extensions: NoImplicitPrelude
                       ScopedTypeVariables
@@ -55,8 +56,6 @@ library
   exposed-modules:    Course
                       Course.Anagrams
                       Course.Applicative
-                      Course.Apply
-                      Course.Bind
                       Course.Cheque
                       Course.Comonad
                       Course.Compose
@@ -72,6 +71,7 @@ library
                       Course.List
                       Course.ListZipper
                       Course.Monad
+                      Course.MonadTutorial
                       Course.MoreParser
                       Course.Optional
                       Course.Parser

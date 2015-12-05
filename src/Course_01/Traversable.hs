@@ -5,6 +5,7 @@
 module Course.Traversable where
 
 import Course.Functor
+import Course.Apply
 import Course.Applicative
 import Course.List
 
@@ -12,7 +13,7 @@ import Course.List
 -- laws are not checked by the compiler. These laws are given as:
 --
 -- * The law of naturality
---   `∀f g. f . traverse g ≅ traverse (f . g)`
+--   `∀f g. f . traverseg ≅ traverse (f . g)`
 --
 -- * The law of identity
 --   `∀x. traverse Id x ≅ Id x`
