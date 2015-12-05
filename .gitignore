@@ -9,6 +9,9 @@ doctest
 /.cabal-sandbox
 /cabal.sandbox.config
 
+# stack
+.stack-work
+
 # Haskell Program Coverage
 /.hpc
 
