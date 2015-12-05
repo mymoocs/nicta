@@ -1,25 +1,24 @@
-41;285;0c*~
+*~
 *#*
-*.exe
-doctest
 
 # CABAL
-/dist
+dist
+
+# cabal-dev
 /cabal-dev
-/.cabal-sandbox
-/cabal.sandbox.config
 
 # Haskell Program Coverage
-/.hpc
+.hpc
 
 # Leksah
 *.lkshs
 
 # Intellij IDEA
-/.idea
+.idea/workspace.xml
+.idea/ant.xml
 
 # darcs
-/_darcs
+_darcs
 
 # ctags
 TAGS
@@ -27,5 +26,3 @@ TAGS
 # sbt
 /project
 /target
-
-*.swp
