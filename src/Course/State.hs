@@ -32,15 +32,16 @@ newtype State s a =
   }
 
 -- | Implement the `Functor` instance for `State s`.
--- >>> runState ((+1) <$> pure 0) 0
--- (1,0)
+--
+-- >>> runState ((+1) <$> State (\s -> (9, s * 2))) 3
+-- (10,6)
 instance Functor (State s) where
   (<$>) ::
     (a -> b)
     -> State s a
     -> State s b
   (<$>) =
-      error "todo: Course.State#(<$>)"
+    error "todo: Course.State#(<$>)"
 
 -- | Implement the `Applicative` instance for `State s`.
 --
@@ -173,7 +174,7 @@ distinct =
 -- In contrast, a sad number (not a happy number) is where the sum of the square of its digits never reaches 1
 -- because it results in a recurring sequence.
 --
--- /Tip:/ Use `findM` with `State` and `produce`.
+-- /Tip:/ Use `firstRepeat` with `produce`.
 --
 -- /Tip:/ Use `join` to write a @square@ function.
 --
